@@ -1,38 +1,47 @@
 import numpy as np
 import matplotlib.pyplot as plt
  
-fs = 2 
-# np.arange(a, b, c) : a부터 b까지 범위를 c간격으로 뽑는다.
-t = np.arange(-np.pi, np.pi, 1 / fs)
-print(f"len(t): {len(t)}") # 샘플의 갯수
+begintime = -np.pi
+endtime = np.pi
+samplingfreq = 100
+samplinginterval = 1 / samplingfreq
+timepoints = np.arange(begintime, endtime, samplinginterval)
+print(f"len(timepoints): {len(timepoints)}") # 샘플의 갯수
 
-# signal 정의
-signal = 1
+# create signal
+signal = timepoints - timepoints + 1
  
 # Discrete Fourier transform with Fast Fourier Transform
-fft = np.fft.fft(signal) / len(signal)  #  반환값을 '양의 영역 다음에 음의 영역 순서'로 반환한다.
-print(f"fft: {fft[:2]}")
+fft = np.fft.fft(signal) / len(timepoints) # normalize
+print(f"fft: {fft[:10]}")
  
 fft_magnitude = abs(fft)
 
+# create subplot
+figure, axis = plt.subplots(3, 1)
+plt.subplots_adjust(hspace=1)
 
 # Draw the signal graph
-plt.subplot(23,1,1)
-plt.plot(t,signal)
-plt.grid()
+axis[0].set_title("the signal")
+axis[0].set_xlabel('Time')
+axis[0].plot(timepoints,signal)
+axis[0].grid()
 
 # Draw the fft in real part
-plt.subplot(3,1,2)
-plt.plot(t,signal.real)
-plt.grid()
+axis[1].set_title("fft real part")
+axis[1].set_xlabel("frequency")
+freq = np.fft.fftfreq(timepoints.shape[-1])
+axis[1].plot(freq,fft.real)
+axis[1].grid()
 
 # Draw fft_magnitude graph using stem graph.
-plt.subplot(3,1,3)
-length = len(t)
-f = np.linspace(-(fs / 2), fs / 2, length) 
-plt.stem(f, np.fft.fftshift(fft_magnitude)) # 줄기와 잎 그림.
-plt.ylim(0,2.5)
-plt.grid()
+length = len(timepoints)
+f = np.linspace(-(samplingfreq / 2), samplingfreq / 2, length) 
+axis[2].set_title("fft_magnitude")
+axis[2].set_xlabel("frequency")
+axis[2].stem(f, np.fft.fftshift(fft_magnitude)) # 줄기와 잎 그림.
+axis[2].set_ylim(-0.5,0.5)
+axis[2].grid()
  
 plt.savefig('savefig_default2.png')
  

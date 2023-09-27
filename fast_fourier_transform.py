@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
  
-fs = 1 
+fs = 100
 t = np.arange(0, 3, 1 / fs) # from 0 to 3, each interval 1/100. len(t) = (3-0)*fs
 
 f1 = 35
@@ -16,12 +16,16 @@ fft_magnitude = abs(fft)
 
 
 # Draw signal graph
-plt.subplot(2,1,1)
+plt.subplot(3,1,1)
 plt.plot(t,signal)
 plt.grid()
 
+plt.subplot(3,1,2)
+plt.plot(t, fft.real)
+plt.grid()
+
 # Draw fft_magnitude graph using stem graph.
-plt.subplot(2,1,2)
+plt.subplot(3,1,3)
 length = len(signal)
 f = np.linspace(-(fs / 2), fs / 2, length) 
 plt.stem(f, np.fft.fftshift(fft_magnitude)) # 줄기와 잎 그림.
