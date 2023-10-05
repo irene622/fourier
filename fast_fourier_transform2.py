@@ -3,10 +3,11 @@ import matplotlib.pyplot as plt
  
 begintime = -np.pi
 endtime = np.pi
-samplingfreq = 200
+samplingfreq = 50
 samplinginterval = 1 / samplingfreq
 timepoints = np.arange(begintime, endtime, samplinginterval)
-print(f"len(timepoints): {len(timepoints)}") # 샘플의 갯수
+num_samples = len(timepoints)
+print(f"the number of samples: {num_samples}") # 샘플의 갯수
 
 # create signal
 signal = timepoints - timepoints + 1
@@ -18,30 +19,21 @@ print(f"fft: {fft[:10]}")
 fft_magnitude = abs(fft)
 
 # create subplot
-figure, axis = plt.subplots(3, 1)
+figure, axis = plt.subplots(2, 1, figsize=(8, 8))
 plt.subplots_adjust(hspace=1)
 
 # Draw the signal graph
 axis[0].set_title("the signal")
-axis[0].set_xlabel('Time')
-axis[0].plot(timepoints,signal)
+axis[0].set_xlabel("time")
+axis[0].plot(timepoints, signal)
 axis[0].grid()
 
 # Draw the fft in real part
-axis[1].set_title("fft real part")
+axis[1].set_title("fft magnitude")
 axis[1].set_xlabel("frequency")
-freq = np.fft.fftfreq(timepoints.shape[-1])
-axis[1].plot(freq,fft.real)
+freq = np.fft.fftfreq(num_samples)
+axis[1].plot(freq, fft_magnitude)
 axis[1].grid()
-
-# Draw fft_magnitude graph using stem graph.
-length = len(timepoints)
-f = np.linspace(-(samplingfreq / 2), samplingfreq / 2, length) 
-axis[2].set_title("fft_magnitude")
-axis[2].set_xlabel("frequency")
-axis[2].stem(f, np.fft.fftshift(fft_magnitude)) # 줄기와 잎 그림.
-axis[2].set_ylim(-0.5,0.5)
-axis[2].grid()
  
-plt.savefig('savefig_default2.png')
+plt.savefig("savefig_default2.png")
  

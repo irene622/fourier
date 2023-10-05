@@ -32,5 +32,5 @@ plt.stem(f, np.fft.fftshift(fft_magnitude)) # 줄기와 잎 그림.
 plt.ylim(0,2.5)
 plt.grid()
  
-plt.savefig('savefig_default.png')
+plt.savefig("savefig_default.png")
  
