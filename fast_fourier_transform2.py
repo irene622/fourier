@@ -25,14 +25,12 @@ plt.subplots_adjust(hspace=1)
 # Draw the signal graph
 axis[0].set_title("the signal")
 axis[0].set_xlabel("time")
-axis[0].plot(timepoints, signal, "k-")
+axis[0].plot(timepoints, signal)
 axis[0].grid()
 
 # Draw the fft in real part
 axis[1].set_title("the real part")
 axis[1].set_xlabel("frequency")
-freq = np.fft.fftfreq(num_samples)
-freq = sorted(freq)
 real_part = sorted(fft.real)
 axis[1].plot(timepoints, real_part)
 axis[1].grid()
