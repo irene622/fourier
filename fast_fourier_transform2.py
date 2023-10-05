@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
  
 begintime = -np.pi
 endtime = np.pi
-samplingfreq = 100
+samplingfreq = 200
 samplinginterval = 1 / samplingfreq
 timepoints = np.arange(begintime, endtime, samplinginterval)
 print(f"len(timepoints): {len(timepoints)}") # 샘플의 갯수
