@@ -9,6 +9,7 @@ f2 = 10
 # 35Hz를 갖는 0.6 진폭의 신호와 10Hz를 갖는 3 진폭 신호를 생성한 뒤,
 # 두 신호를 더하여 설명에 사용할 신호를 생성한다.
 signal = 0.6 * np.sin(2 * np.pi * f1 * t) + 3 * np.cos(2 * np.pi * f2 * t + np.pi/2)
+signal = t - t + 1
  
 # Fourier transform
 fft = np.fft.fft(signal) / len(signal)  #  반환값을 '양의 영역 다음에 음의 영역 순서'로 반환한다.
