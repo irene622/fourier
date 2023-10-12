@@ -1,12 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
  
-begintime = -np.pi
+begintime = 0
 endtime = np.pi
-samplingfreq = 40
-samplinginterval = 1 / samplingfreq
-timepoints = np.arange(begintime, endtime, samplinginterval)
+timelength = endtime - begintime
+samplingfreq = 32
+samplinginterval = timelength / samplingfreq
+timepoints = np.arange(begintime, endtime+samplinginterval, samplinginterval)
 num_samples = len(timepoints)
+print(timepoints)
 print(f"the number of samples: {num_samples}") # 샘플의 갯수
 
 # create signal
@@ -14,19 +16,17 @@ print(f"the number of samples: {num_samples}") # 샘플의 갯수
 signal = np.ones(num_samples)
 first = int(num_samples/3)
 signal[:first] = 0
-print(signal)
 signal[first*2:] = 0
-print(signal)
  
 # Discrete Fourier transform with Fast Fourier Transform
-fft = np.fft.fft(signal)
-print(f"fft: {fft[:10]}")
+fft = np.fft.fft(signal) # 결과 체크를 하기. 작은 샘플량으로도 해보기.
+print(f"fft: {fft}")
  
 fft_magnitude = abs(fft)
 
 # create subplot
-figure, axis = plt.subplots(3, 1, figsize=(8, 8))
-plt.subplots_adjust(hspace=1)
+figure, axis = plt.subplots(3, 1, figsize=(10, 10))
+plt.subplots_adjust(hspace=0.5)
 
 # Draw the signal graph
 axis[0].set_title("the signal")
@@ -39,7 +39,8 @@ axis[1].set_title("the real part")
 axis[1].set_xlabel("frequency")
 real_part = fft.real
 freq = np.fft.fftfreq(num_samples)
-axis[1].plot(freq, fft)
+print(freq)
+axis[1].plot(freq, fft.real)
 axis[1].grid()
 
 # Draw the fft_magnitude
