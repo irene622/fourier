@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-begintime = -1
-endtime = 20
+begintime = 0
+endtime = 10
 timelength = endtime - begintime
-samplingfreq = 1000
+samplingfreq = 512
 samplinginterval = timelength / samplingfreq
 timepoints = np.arange(begintime, endtime, samplinginterval)
 num_samples = len(timepoints)
@@ -22,21 +22,18 @@ signal = [f_T(x) for x in timepoints]
 
 # Discrete Fourier transform with Fast Fourier Transform
 fft = np.fft.fft(signal)
-print(len(fft))
-print(fft[0], fft[1], fft[2], fft[-1])
 fft_magnitude = abs(fft)
 
 N = samplingfreq 
 T = 16 
 delta_omega = 2*np.pi / T
 P = int(N / T)
-R = 2 # degree of phase function of H
+R = 2 # degree of phase function of lanmda_T
 
 # Draw the signal graph
 plt.title("the amplitude")
 plt.ylabel("amplitude")
 freq = np.fft.fftfreq(num_samples)
-print(freq[:4])
 plt.plot(freq, fft_magnitude)
 plt.grid()
 
