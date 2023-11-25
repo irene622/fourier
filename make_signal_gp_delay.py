@@ -27,33 +27,18 @@ def f_T(x) :
     return x * np.exp(-alpha * x) * np.cos(2*np.pi*f_0*x) * u
 signal = [f_T(x) for x in timepoints]
 
+# make the group delay of signal
+fft = np.fft.fft(signal)
+fft = np.fft.fftshift(fft)
+fft_magnitude = abs(fft)
+fft = fft / fft_magnitude
+f = interpolate.interp1d(fft.real[:241], fft.imag[:241], kind = 'quadratic')
 
-# make matrix B
-def Pi(n, k, T) :
-    if -0.5 <= (n - T*k) / T < 0.5 :
-        return 1
-    else :
-        return 0 
+# Draw the signal graph
+plt.title("f")
+xnew = np.arange(0, 258, N)
+ynew = f(xnew) 
+plt.plot(xnew, ynew)
+plt.grid()
 
-def b_nr(n, r) :
-    b_nr = 0
-    _P = int(P/2)
-    for k in range(-_P, _P) :
-        b_nr += (n - k*T) ** (2*r) * Pi(n, k, T)
-    return b_nr
-
-B_qT = np.zeros((N, int(R/2 + 1)))
-for n in range(N) :
-    for r in range(int(R/2 + 1)) :
-        B_qT[n][r] = b_nr(int(n/2 + T/2), r)
-
-
-B_q2m = np.zeros((N, int(R/2 + 1)))
-for n in range(N) :
-    for r in range(int(R/2 + 1)) :
-        B_q2m[n][r] = b_nr(n/2, r)
-
-D_psi = B_qT + B_q2m
-
-
-
+plt.savefig("f.png")
