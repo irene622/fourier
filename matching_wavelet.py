@@ -15,7 +15,6 @@ P = int(N / T) # number of period
 R = 2 # degree of phase function of lanmda_T
 a = 1.0348 # constant. hyperparameters
 
-print(len(timepoints))
 
 alpha = 2.0
 f_0 = 0.8
@@ -68,13 +67,14 @@ def matching_wavelet(signal, N, l, T, delta_omega, P, R, a) :
     Y = 1/a * W + np.matmul(Y1, Y2)
     return Y, W
 
-Y, W = matching_wavelet(signal, N, l, T, delta_omega, P, R, a)
+if __name__ == "__main__" :
+    Y, W = matching_wavelet(signal, N, l, T, delta_omega, P, R, a)
 
-# Draw the vector Y
-plt.title("Amplitude matching")
-plt.plot([i for i in range(Y.shape[0])], Y, label='Amplitude Matching')
-plt.plot([i for i in range(Y.shape[0])], W, '--', label='Amplitude of singal fft')
-plt.grid()
-plt.legend()
+    # Draw the vector Y
+    plt.title("Amplitude matching")
+    plt.plot([i for i in range(Y.shape[0])], Y, label='Amplitude Matching')
+    plt.plot([i for i in range(Y.shape[0])], W, '--', label='Amplitude of singal fft')
+    plt.grid()
+    plt.legend()
 
-plt.savefig("Amplitude_matching.png")
+    plt.savefig("Amplitude_matching.png")
