@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
  
 begintime = 0
-endtime = np.pi
+endtime = np.pi*3
 timelength = endtime - begintime
 samplingfreq = 32
 samplinginterval = timelength / samplingfreq
