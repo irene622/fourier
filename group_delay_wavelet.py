@@ -38,7 +38,7 @@ def b_nr(n, r) :
     b_nr = 0
     _P = int(P/2)
     for k in range(-_P, _P) :
-        b_nr += (n - k*T) ^ (2*r) * Pi(n, k, T)
+        b_nr += (n - k*T) ** (2*r) * Pi(n, k, T)
     return b_nr
 
 B_qT = np.zeros((N, int(R/2 + 1)))
@@ -47,3 +47,9 @@ for n in range(N) :
         B_qT[n][r] = b_nr(int(n/2 + T/2), r)
 print(B_qT.shape)
 print(B_qT[256:260])
+
+B_q2m = np.zeros((N, int(R/2 + 1)))
+for n in range(N) :
+    for r in range(int(R/2 + 1)) :
+        B_q2m[n][r] = b_nr(n/2, r)
+print(B_q2m.shape)
