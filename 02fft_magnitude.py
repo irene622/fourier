@@ -22,13 +22,19 @@ signal = [f_T(x) for x in timepoints]
 
 # Discrete Fourier transform with Fast Fourier Transform
 fft = np.fft.fft(signal)
+fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
+
+# freq domain
+k = np.arange(num_samples)
+Fs = samplinginterval
+T = num_samples / Fs
+freq = k / T
 
 # Draw the signal graph
 plt.title("the amplitude")
 plt.ylabel("amplitude")
-freq = np.fft.fftfreq(num_samples)
 plt.plot(freq, fft_magnitude)
 plt.grid()
 
-plt.savefig("fft_magnitude.png")
+plt.savefig("02fft_magnitude.png")

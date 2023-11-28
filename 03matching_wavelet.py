@@ -60,8 +60,8 @@ def matching_wavelet(signal, N, l, T, delta_omega, P, R, a) :
     for idx in range(1, size, 2) :
         permuatation_mat[n] = _permuatation_mat[idx]
         n += 1
-    
     fft = np.matmul(fft, permuatation_mat)
+    
     fft_magnitude = abs(fft)
 
     start_n = int(2**l / 3) + 1
@@ -84,8 +84,8 @@ def matching_wavelet(signal, N, l, T, delta_omega, P, R, a) :
     Y2 = np.matmul(A_t, Y1)
     Y3 = np.ones(A.shape[0]) - 1/a * np.matmul(A, W)
     Y = 1/a * W + np.matmul(Y2, Y3)
-    # sum_Y = sum(Y)
-    # Y = Y * 1/sum_Y
+    sum_Y = sum(Y)
+    Y = Y * 1/sum_Y
     return Y, W
 
 if __name__ == "__main__" :
