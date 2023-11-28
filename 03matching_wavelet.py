@@ -67,7 +67,7 @@ def matching_wavelet(signal, N, l, T, delta_omega, P) :
 
     # make matrix W
     W = np.array(fft_magnitude[start_n: end_n+1]) # W.shape = (end_n - start_n + 1, 1)
-    W = W * 1/sum(W) # normalizeing W
+    W = W * 1/T 
 
     if end_n - start_n + 1 == W.shape[0] :
         print("Correspond the size of W")
@@ -90,7 +90,7 @@ def matching_wavelet(signal, N, l, T, delta_omega, P) :
     Y2 = np.matmul(A_t, Y1)
     Y3 = np.ones(A.shape[0]) - 1/a * np.matmul(A, W)
     Y = 1/a * W + np.matmul(Y2, Y3)
-    Y = Y * 1/sum(Y)
+    # Y = Y * 1/sum(Y)
     return Y, W
 
 if __name__ == "__main__" :
