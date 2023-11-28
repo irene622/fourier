@@ -68,6 +68,7 @@ def matching_wavelet(signal, N, l, T, delta_omega, P, R, a) :
     return Y, W
 
 if __name__ == "__main__" :
+    # Matching Discrete Spectrum Amplitude
     Y, W = matching_wavelet(signal, N, l, T, delta_omega, P, R, a)
 
     # Draw the vector Y
