@@ -49,6 +49,7 @@ def matching_wavelet(signal, N, l, T, delta_omega, P, R, a) :
     # Make matrix W
     fft = np.fft.fft(signal)
     fft = np.fft.fftshift(fft)
+
     size = fft.shape[0]
     _permuatation_mat = np.identity(size)
     permuatation_mat = np.zeros((size, size))
@@ -59,7 +60,6 @@ def matching_wavelet(signal, N, l, T, delta_omega, P, R, a) :
     for idx in range(1, size, 2) :
         permuatation_mat[n] = _permuatation_mat[idx]
         n += 1
-    print(permuatation_mat)
     
     fft = np.matmul(fft, permuatation_mat)
     fft_magnitude = abs(fft)
@@ -72,11 +72,6 @@ def matching_wavelet(signal, N, l, T, delta_omega, P, R, a) :
     sum_W = sum(W)
     W = W * 1/sum_W # normalizeing W
 
-    W = np.zeros((end_n - start_n + 1,))
-    n = 0
-    for idx in range(start_n - 1, end_n, delta_omega) : 
-        W[n] = fft_magnitude[idx]
-        n +=1 
     if end_n - start_n + 1 == W.shape[0] :
         print("Right the size of W")
         print(f"W.shape {W.shape} | end_n - start_n {end_n - start_n + 1}")
