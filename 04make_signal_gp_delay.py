@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matching_wavelet import *
 from scipy import interpolate
 
 begintime = 0
@@ -33,10 +32,14 @@ fft = fft / fft_magnitude
 f = interpolate.interp1d(fft.real[:256], fft.imag[:256], kind = 'quadratic')
 
 # Draw the signal graph
+plt.figure(figsize=(7,5))
+plt.xlim(-1.1, 1.1)
+plt.ylim([-1,1])
 plt.title("f")
-xnew = np.arange(0, 258, N)
-ynew = f(xnew) 
-plt.plot(xnew, ynew)
+
+ynew = f(fft.real[:256]) 
+print(fft.real[:256])
+plt.plot(fft.real[:256], ynew)
 plt.grid()
 
 plt.savefig("04group_delay_signal.png")
