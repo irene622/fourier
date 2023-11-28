@@ -24,12 +24,6 @@ signal = [f_T(x) for x in timepoints]
 fft = np.fft.fft(signal)
 fft_magnitude = abs(fft)
 
-N = samplingfreq 
-T = 16 
-delta_omega = 2*np.pi / T
-P = int(N / T)
-R = 2 # degree of phase function of lanmda_T
-
 # Draw the signal graph
 plt.title("the amplitude")
 plt.ylabel("amplitude")

@@ -19,10 +19,6 @@ def f_T(x) :
     return x * np.exp(-alpha * x) * np.cos(2*np.pi*f_0*x) * u
 signal = [f_T(x) for x in timepoints]
 
-fft = np.fft.fft(signal)
-real_part = fft.real
-freq = np.fft.fftfreq(num_samples)
-
 # Draw the signal graph
 plt.title("signal")
 plt.xlabel("timepoints")
