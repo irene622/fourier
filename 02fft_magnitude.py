@@ -2,13 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 begintime = 0
-endtime = 10
+endtime = 16
 timelength = endtime - begintime
-samplingfreq = 512
-samplinginterval = timelength / samplingfreq
-timepoints = np.arange(begintime, endtime, samplinginterval)
-num_samples = len(timepoints)
-print(num_samples)
+N = 512 # number of sample
+sampling_freq = timelength / N
+timepoints = np.arange(begintime, endtime, sampling_freq)
 
 alpha = 2.0
 f_0 = 0.8
@@ -21,14 +19,13 @@ def f_T(x) :
 signal = [f_T(x) for x in timepoints]
 
 # Discrete Fourier transform with Fast Fourier Transform
-fft = np.fft.fft(signal)
+fft = np.fft.fft(signal) / N
 fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
 
 # freq domain
-k = np.arange(num_samples)
-Fs = samplinginterval
-T = num_samples / Fs
+k = np.arange(N)
+T = N / sampling_freq
 freq = k / T
 
 # Draw the signal graph

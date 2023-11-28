@@ -2,24 +2,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 begintime = 0
-endtime = 10
+endtime = 16
 timelength = endtime - begintime
-samplingfreq = 512
-samplinginterval = timelength / samplingfreq
-timepoints = np.arange(begintime, endtime, samplinginterval)
-N = samplingfreq # number of sample
+N = 512 # number of sample
+sampling_freq = timelength / N
+timepoints = np.arange(begintime, endtime, sampling_freq)
 l = 4
 T = 2 ** l # period
 delta_omega = 2*np.pi / T
 P = int(N / T) # number of period
 R = 2 # degree of phase function of lanmda_T
-a = 1.0348 # constant. hyperparameters
 
 
 alpha = 2.0
 f_0 = 0.8
 def f_T(x) :
-    if x <= 0 :
+    if x < 0 :
         u = 0
     else :
         u = 1 
@@ -42,7 +40,7 @@ def make_A(size) :
     A[10][10] = 2
     return A
 
-def matching_wavelet(signal, N, l, T, delta_omega, P, R, a) :
+def matching_wavelet(signal, N, l, T, delta_omega, P) :
     # Make matrix A
     A = make_A((11,16))
 
@@ -68,9 +66,8 @@ def matching_wavelet(signal, N, l, T, delta_omega, P, R, a) :
     end_n = int((2**(l+2)) / 3)
 
     # make matrix W
-    W = np.array(fft_magnitude[start_n-1: end_n]) # W.shape = (end_n - start_n + 1, 1)
-    sum_W = sum(W)
-    W = W * 1/sum_W # normalizeing W
+    W = np.array(fft_magnitude[start_n: end_n+1]) # W.shape = (end_n - start_n + 1, 1)
+    W = W * 1/sum(W) # normalizeing W
 
     if end_n - start_n + 1 == W.shape[0] :
         print("Correspond the size of W")
@@ -88,22 +85,17 @@ def matching_wavelet(signal, N, l, T, delta_omega, P, R, a) :
     a = numerate3 / denominator2
     print(f"a: {a}") # a
 
-
     # Calculate Y
-    A_t = np.transpose(A)
     Y1 = np.linalg.inv(np.matmul(A, A_t))
     Y2 = np.matmul(A_t, Y1)
     Y3 = np.ones(A.shape[0]) - 1/a * np.matmul(A, W)
     Y = 1/a * W + np.matmul(Y2, Y3)
-    sum_Y = sum(Y)
-    Y = Y * 1/sum_Y
+    Y = Y * 1/sum(Y)
     return Y, W
 
 if __name__ == "__main__" :
     # Matching Discrete Spectrum Amplitude
-    Y, W = matching_wavelet(signal, N, l, T, delta_omega, P, R, a)
-    # W = np.sqrt(W)
-    # Y = np.sqrt(Y)
+    Y, W = matching_wavelet(signal, N, l, T, delta_omega, P)
 
     # Draw the vector Y
     plt.title("Amplitude matching")
