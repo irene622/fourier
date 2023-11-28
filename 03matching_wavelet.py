@@ -48,21 +48,21 @@ def matching_wavelet(signal, N, l, T, delta_omega, P, R, a) :
 
     # Make matrix W
     fft = np.fft.fft(signal)
-    fft = np.fft.fftshift(fft)
+    # fft = np.fft.fftshift(fft)
 
-    size = fft.shape[0]
-    _permuatation_mat = np.identity(size)
-    permuatation_mat = np.zeros((size, size))
-    n = 0
-    for idx in range(0, size, 2) :
-        permuatation_mat[n, :] = _permuatation_mat[idx, :].copy()
-        n += 1
-    for idx in range(1, size, 2) :
-        permuatation_mat[n] = _permuatation_mat[idx]
-        n += 1
-    fft = np.matmul(fft, permuatation_mat)
+    # size = fft.shape[0]
+    # _permuatation_mat = np.identity(size)
+    # permuatation_mat = np.zeros((size, size))
+    # n = 0
+    # for idx in range(0, size, 2) :
+    #     permuatation_mat[n, :] = _permuatation_mat[idx, :].copy()
+    #     n += 1
+    # for idx in range(1, size, 2) :
+    #     permuatation_mat[n] = _permuatation_mat[idx]
+    #     n += 1
+    # fft = np.matmul(fft, permuatation_mat)
     
-    fft_magnitude = abs(fft)
+    fft_magnitude = abs(fft) ** 2
 
     start_n = int(2**l / 3) + 1
     end_n = int((2**(l+2)) / 3)
@@ -73,10 +73,21 @@ def matching_wavelet(signal, N, l, T, delta_omega, P, R, a) :
     W = W * 1/sum_W # normalizeing W
 
     if end_n - start_n + 1 == W.shape[0] :
-        print("Right the size of W")
-        print(f"W.shape {W.shape} | end_n - start_n {end_n - start_n + 1}")
+        print("Correspond the size of W")
+        print(f"W.shape: {W.shape} | start_n: {start_n} | end_n: {end_n}")
     else :
         print(f"W.shape have to equal to {end_n - start_n + 1}. Configure the size.")
+
+    # Calculate a
+    A_t = np.transpose(A)
+    numerate1 = np.transpose(np.ones(A.shape[0])) # 1.tr
+    numerate2 = np.linalg.inv(np.matmul(A, A_t))
+    numerate3 = np.matmul(np.matmul(np.matmul(numerate1, numerate2), A), W) # 분자
+    denominator1 = np.matmul(numerate1, numerate2)
+    denominator2 = np.matmul(denominator1, np.ones(A.shape[0])) # 분모
+    a = numerate3 / denominator2
+    print(f"a: {a}") # a
+
 
     # Calculate Y
     A_t = np.transpose(A)
@@ -92,12 +103,12 @@ if __name__ == "__main__" :
     # Matching Discrete Spectrum Amplitude
     Y, W = matching_wavelet(signal, N, l, T, delta_omega, P, R, a)
     # W = np.sqrt(W)
-    Y = np.sqrt(Y)
+    # Y = np.sqrt(Y)
 
     # Draw the vector Y
     plt.title("Amplitude matching")
     plt.plot([i for i in range(Y.shape[0])], Y, label='Amplitude Matching')
-    plt.plot([i for i in range(Y.shape[0])], W, '--', label='Amplitude of singal fft')
+    plt.plot([i for i in range(Y.shape[0])], W, '--', label='fft magnitude of singal')
     plt.grid()
     plt.legend()
 
