@@ -4,18 +4,16 @@ from matching_wavelet import *
 from scipy import interpolate
 
 begintime = 0
-endtime = 20
+endtime = 16
 timelength = endtime - begintime
-samplingfreq = 512
-samplinginterval = timelength / samplingfreq
-timepoints = np.arange(begintime, endtime, samplinginterval)
-N = samplingfreq # number of sample
+N = 512 # number of sample
+sampling_freq = timelength / N
+timepoints = np.arange(begintime, endtime, sampling_freq)
 l = 4
 T = 2 ** l # period
 delta_omega = 2*np.pi / T
 P = int(N / T) # number of period
 R = 2 # degree of phase function of lanmda_T
-a = 1.0348 # constant. hyperparameters
 
 alpha = 2.0
 f_0 = 0.8
@@ -28,11 +26,11 @@ def f_T(x) :
 signal = [f_T(x) for x in timepoints]
 
 # make the group delay of signal
-fft = np.fft.fft(signal)
+fft = np.fft.fft(signal) / N
 fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
 fft = fft / fft_magnitude
-f = interpolate.interp1d(fft.real[:241], fft.imag[:241], kind = 'quadratic')
+f = interpolate.interp1d(fft.real[:256], fft.imag[:256], kind = 'quadratic')
 
 # Draw the signal graph
 plt.title("f")
@@ -41,4 +39,4 @@ ynew = f(xnew)
 plt.plot(xnew, ynew)
 plt.grid()
 
-plt.savefig("f.png")
+plt.savefig("04group_delay_signal.png")
