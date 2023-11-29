@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 begintime = 0
 endtime = 16
 timelength = endtime - begintime
-N = 512 # number of sample
+N = 512 * (2**0.25) # number of sample
 sampling_freq = timelength / N
 timepoints = np.arange(begintime, endtime, sampling_freq)
 l = 4
@@ -67,7 +67,7 @@ def matching_wavelet(signal, N, l, T, delta_omega, P) :
 
     # make matrix W
     W = np.array(fft_magnitude[start_n: end_n+1]) # W.shape = (end_n - start_n + 1, 1)
-    W = W * 1/T 
+    W = W * 1/T # 이게 뭐야...
 
     if end_n - start_n + 1 == W.shape[0] :
         print("Correspond the size of W")
@@ -104,4 +104,4 @@ if __name__ == "__main__" :
     plt.grid()
     plt.legend()
 
-    plt.savefig("03amplitude_matching_wavelet.png")
+    plt.savefig("03amplitude_matching_wavelet_N_512_2_1_4.png")
