@@ -5,7 +5,7 @@ from scipy import interpolate
 begintime = 0
 endtime = 16
 timelength = endtime - begintime
-N = 512 # number of sample
+N = 100 # number of sample
 sampling_freq = timelength / N
 timepoints = np.arange(begintime, endtime, sampling_freq)
 l = 4
@@ -29,17 +29,17 @@ fft = np.fft.fft(signal) / N
 fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
 fft = fft / fft_magnitude
-f = interpolate.interp1d(fft.real[:256], fft.imag[:256], kind = 'quadratic')
+angle = np.angle(fft)
+print(angle)
+f = interpolate.interp1d(angle, fft_magnitude, kind = 'quadratic')
 
 # Draw the signal graph
 plt.figure(figsize=(7,5))
-plt.xlim(-1.1, 1.1)
-plt.ylim([-1,1])
+plt.xlim(0, 2)
+plt.ylim([-2,2])
 plt.title("f")
 
-ynew = f(fft.real[:256]) 
-print(fft.real[:256])
-plt.plot(fft.real[:256], ynew)
+plt.plot(angle, f(angle))
 plt.grid()
 
 plt.savefig("04group_delay_signal.png")
