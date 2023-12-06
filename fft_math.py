@@ -1,3 +1,4 @@
+### Example 1 : FFT in numpy
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -20,6 +21,7 @@ print(fft) # [-3.+0.j  0.+1.j  7.+0.j  0.-1.j]
 
 
 
+### Example 2 : FFT in torch
 import torch
 
 signal = torch.tensor([1,3,1,2], dtype=torch.complex64)
@@ -37,3 +39,6 @@ print(dfs) # [7, 0+1j, -3, 0-1j]
 fft = torch.fft.fft(signal)
 print(fft) # tensor([ 7.+0.j,  0.-1.j, -3.+0.j,  0.+1.j])
 
+
+
+### Example 3 : Experiment Example 3.5 in [A First Course in Wavelets with Fourier Analysis-Wiley], Albert Boggess, 2009
