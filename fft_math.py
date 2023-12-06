@@ -43,16 +43,16 @@ print(fft) # tensor([ 7.+0.j,  0.-1.j, -3.+0.j,  0.+1.j])
 
 ### Example 3 : Experiment Example 3.5 in [A First Course in Wavelets with Fourier Analysis-Wiley], Albert Boggess, 2009
 def function(t) :
-    return t + t^2
+    return t + t**2
 
 N = 64
-timepoints = torch.arange(N)
+timepoints = torch.arange(0, 2*np.pi, 2*np.pi/N, dtype=float)
 signal = torch.tensor([function(k) for k in timepoints])
 
-fft = torch.fft.fft(signal) / 8
+fft = torch.fft.fft(signal)
 fft_magnitude = abs(fft)
 
 plt.title("Fig 3.3 Plot of fast Fourier transform coefficients.")
-plt.plot(timepoints, fft_magnitude, ".")
+plt.plot(timepoints[1:-1], fft_magnitude[1:-1], ".")
 plt.grid()
 plt.savefig("fft_math3.png")
