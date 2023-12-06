@@ -5,7 +5,7 @@ begintime = 0
 endtime = 16
 timelength = endtime - begintime
 N = 512 # number of sample
-sampling_freq = timelength / N
+sampling_freq = timelength / N # sampling points들의 간격.
 timepoints = np.arange(begintime, endtime, sampling_freq)
 
 alpha = 2.0

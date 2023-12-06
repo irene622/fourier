@@ -25,21 +25,26 @@ def f_T(x) :
 signal = [f_T(x) for x in timepoints]
 
 # make the group delay of signal
-fft = np.fft.fft(signal) / N
+fft = np.fft.fft(signal)
 fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
-fft = fft / fft_magnitude
+# fft = fft / fft_magnitude
 angle = np.angle(fft)
-print(angle)
-f = interpolate.interp1d(angle, fft_magnitude, kind = 'quadratic')
+angle = angle[:int(N/2)-1]
+fft_magnitude = fft_magnitude[:int(N/2)]
+
+T = N / sampling_freq
+k = np.arange(N)
+freq = k / T
+freq = freq[:int(N/2)]
+print(freq)
+f = interpolate.interp1d(freq, fft_magnitude, kind = 'quadratic')
 
 # Draw the signal graph
 plt.figure(figsize=(7,5))
-plt.xlim(0, 2)
-plt.ylim([-2,2])
 plt.title("f")
 
-plt.plot(angle, f(angle))
+plt.plot(freq, f(freq))
 plt.grid()
 
 plt.savefig("04group_delay_signal.png")
