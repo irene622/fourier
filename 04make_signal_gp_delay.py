@@ -5,7 +5,7 @@ from scipy import interpolate
 begintime = 0
 endtime = 16
 timelength = endtime - begintime
-N = 100 # number of sample
+N = 512 # number of sample
 sampling_freq = timelength / N
 timepoints = np.arange(begintime, endtime, sampling_freq)
 l = 4
@@ -28,16 +28,20 @@ signal = [f_T(x) for x in timepoints]
 fft = np.fft.fft(signal)
 fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
-# fft = fft / fft_magnitude
-angle = np.angle(fft)
-angle = angle[:int(N/2)-1]
 fft_magnitude = fft_magnitude[:int(N/2)]
+print(min(fft_magnitude))
+print(max(fft_magnitude))
+num=0
+for i in fft_magnitude :
+    if i <= 10**(-2) :
+        num += 1
+print(num)
+
 
 T = N / sampling_freq
 k = np.arange(N)
 freq = k / T
 freq = freq[:int(N/2)]
-print(freq)
 f = interpolate.interp1d(freq, fft_magnitude, kind = 'quadratic')
 
 # Draw the signal graph
