@@ -28,12 +28,12 @@ signal = [f_T(x) for x in timepoints]
 fft = np.fft.fft(signal)
 fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
-fft_magnitude = fft_magnitude[:int(N/2)] # 0.007853076233206524, 3.8579644884021937
+# fft_magnitude = fft_magnitude[:int(N/2)] # 0.007853076233206524, 3.8579644884021937
 
 T = N / sampling_freq
 k = np.arange(N)
 freq = k / T
-freq = freq[:int(N/2)]
+# freq = freq[:int(N/2)]
 
 data = []
 for i in range(int(N/2)) :
@@ -67,3 +67,47 @@ plt.plot(filtered_freq, Lambda_f, '.')
 plt.grid()
 
 plt.savefig("04group_delay_signal.png")
+
+
+# make matrix B
+def Pi(n, k, T) :
+    if -0.5 <= (n - T*k) / T < 0.5 :
+        return 1
+    else :
+        return 0 
+
+def b_nr(n, r) :
+    b_nr = 0
+    _P = int(P/2)
+    for k in range(-_P, _P) :
+        b_nr += (n - k*T) ** (2*r) * Pi(n, k, T)
+    return b_nr
+
+B_qT = np.zeros((N, int(R/2 + 1)))
+for n in range(N) :
+    for r in range(int(R/2 + 1)) :
+        B_qT[n][r] = b_nr(int(n/2 + T/2), r)
+
+
+B_q2m = np.zeros((N, int(R/2 + 1)))
+for n in range(N) :
+    for r in range(int(R/2 + 1)) :
+        B_q2m[n][r] = b_nr(n/2, r)
+
+D_psi = B_qT + B_q2m
+
+# calculate Lambda_psi
+conju_Dpsi = np.conjugate(D_psi)
+c_hat1 = np.matmul(np.transpose(conju_Dpsi), conju_Dpsi)
+c_hat2 = np.matmul(np.linalg.inv(c_hat1), np.transpose(conju_Dpsi))
+c_hat = np.matmul(c_hat2, Lambda_f)
+
+Lambda_psi = np.matmul(D_psi, c_hat)
+
+plt.figure(figsize=(7,5))
+plt.title("Lambda_psi")
+
+plt.plot([i for i in range(Lambda_psi.shape[0])], Lambda_psi)
+plt.grid()
+
+plt.savefig("04group_delay_matched_wavelet.png")
