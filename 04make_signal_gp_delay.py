@@ -49,11 +49,21 @@ for fft_mag, freq in data :
 
 f = interpolate.interp1d(filtered_freq, filtered_fft_magnitude, kind = 'quadratic')
 
+# calcurate forward difference operater
+h = 10**(-4)
+Lambda_f = [] #the group delay of the desired signal
+for freq in filtered_freq :
+    try :
+        value = f(freq + h) - f(freq)
+        Lambda_f.append(value / h)
+    except :
+        Lambda_f.append(0)
+
 # Draw the signal graph
 plt.figure(figsize=(7,5))
 plt.title("f")
 
-plt.plot(freq, f(filtered_freq))
+plt.plot(filtered_freq, Lambda_f, '.')
 plt.grid()
 
 plt.savefig("04group_delay_signal.png")
