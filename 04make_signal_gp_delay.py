@@ -58,9 +58,6 @@ for freq in filtered_freq :
         Lambda_f.append(value / h)
     except :
         Lambda_f.append(0)
-
-for i in range(int(N/2)) :
-    freq, fft_mag = data[i]
     
 
 # Draw the group delay of the desired signal
@@ -71,6 +68,12 @@ plt.plot(filtered_freq, Lambda_f, '.')
 plt.grid()
 
 plt.savefig("04group_delay_signal.png")
+
+_Lambda_f = []
+for i in range(int(N/2)) :
+    freq, fft_mag = data[i]
+    _Lambda_f.append(f(freq))
+Lambda_f = np.array(_Lambda_f)
 
 
 # make matrix B
