@@ -37,19 +37,19 @@ freq = k / T
 
 data = []
 for i in range(int(N/2)) :
-    data.append((fft_magnitude[i], freq[i]))
+    data.append((freq[i], fft_magnitude[i]))
 
 # filter the magnitude <= 10**-2
 filtered_freq = []
 filtered_fft_magnitude = []
-for fft_mag, freq in data :
+for freq, fft_mag in data :
     if fft_mag <= 10**(-2) :
-        filtered_fft_magnitude.append(fft_mag)
         filtered_freq.append(freq)
+        filtered_fft_magnitude.append(fft_mag)
 
 f = interpolate.interp1d(filtered_freq, filtered_fft_magnitude, kind = 'quadratic')
 
-# calcurate forward difference operater
+# calculate forward difference operater
 h = 10**(-4)
 Lambda_f = [] #the group delay of the desired signal
 for freq in filtered_freq :
@@ -59,7 +59,11 @@ for freq in filtered_freq :
     except :
         Lambda_f.append(0)
 
-# Draw the signal graph
+for i in range(int(N/2)) :
+    freq, fft_mag = data[i]
+    
+
+# Draw the group delay of the desired signal
 plt.figure(figsize=(7,5))
 plt.title("f")
 
@@ -100,6 +104,8 @@ D_psi = B_qT + B_q2m
 conju_Dpsi = np.conjugate(D_psi)
 c_hat1 = np.matmul(np.transpose(conju_Dpsi), conju_Dpsi)
 c_hat2 = np.matmul(np.linalg.inv(c_hat1), np.transpose(conju_Dpsi))
+Lambda_f =  np.array(Lambda_f)
+print(c_hat2.size, Lambda_f.size)
 c_hat = np.matmul(c_hat2, Lambda_f)
 
 Lambda_psi = np.matmul(D_psi, c_hat)
