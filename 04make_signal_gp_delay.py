@@ -1,4 +1,5 @@
 import numpy as np
+import cmath
 import matplotlib.pyplot as plt
 from scipy import interpolate
 
@@ -28,12 +29,14 @@ signal = [f_T(x) for x in timepoints]
 fft = np.fft.fft(signal)
 fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
+normalize_fft = fft / fft_magnitude
+phase = [cmath.phase(v) for v in normalize_fft]
 # fft_magnitude = fft_magnitude[:int(N/2)] # 0.007853076233206524, 3.8579644884021937
 
 T = N / sampling_freq
 k = np.arange(N)
 freq = k / T
-# freq = freq[:int(N/2)]
+freq_list = [i for i in freq]
 
 data = []
 for i in range(int(N/2)) :
@@ -48,6 +51,7 @@ for freq, fft_mag in data :
         filtered_fft_magnitude.append(fft_mag)
 
 f = interpolate.interp1d(filtered_freq, filtered_fft_magnitude, kind = 'quadratic')
+g = interpolate.interp1d(freq_list, phase, kind = 'quadratic')
 
 # calculate forward difference operater
 h = 10**(-4)
