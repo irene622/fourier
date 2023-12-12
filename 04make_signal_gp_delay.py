@@ -69,6 +69,7 @@ plt.grid()
 
 plt.savefig("04group_delay_signal.png")
 
+
 _Lambda_f = []
 for i in range(int(N/2)) :
     freq, fft_mag = data[i]
@@ -107,8 +108,8 @@ D_psi = B_qT + B_q2m
 conju_Dpsi = np.conjugate(D_psi)
 c_hat1 = np.matmul(np.transpose(conju_Dpsi), conju_Dpsi)
 c_hat2 = np.matmul(np.linalg.inv(c_hat1), np.transpose(conju_Dpsi))
-Lambda_f =  np.array(Lambda_f)
-print(c_hat2.size, Lambda_f.size)
+print(c_hat2.size)
+print(Lambda_f.size)
 c_hat = np.matmul(c_hat2, Lambda_f)
 
 Lambda_psi = np.matmul(D_psi, c_hat)
