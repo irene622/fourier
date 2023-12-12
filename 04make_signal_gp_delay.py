@@ -51,34 +51,55 @@ for freq, fft_mag in data :
         filtered_fft_magnitude.append(fft_mag)
 
 f = interpolate.interp1d(filtered_freq, filtered_fft_magnitude, kind = 'quadratic')
-g = interpolate.interp1d(freq_list, phase, kind = 'quadratic')
+
+data = []
+for i in range(len(freq_list)) :
+    data.append((freq_list[i], fft_magnitude[i]))
+
+filtered_freq_list = []
+filtered_phase = []
+for freq, fft_mag in data :
+    if fft_mag <= 10**(-2) :
+        filtered_freq_list.append(freq)
+        filtered_phase.append(fft_mag)
+
+g = interpolate.interp1d(filtered_freq_list, filtered_phase, kind = 'quadratic')
 
 # calculate forward difference operater
 h = 10**(-4)
-Lambda_f = [] #the group delay of the desired signal
-for freq in filtered_freq :
+# Lambda_f = [] #the group delay of the desired signal
+# for freq in filtered_freq :
+#     try :
+#         value = f(freq + h) - f(freq)
+#         Lambda_f.append(value / h)
+#     except :
+#         Lambda_f.append(0)
+
+Lambda_g = [] #the group delay of the desired signal
+for freq in freq_list :
     try :
-        value = f(freq + h) - f(freq)
-        Lambda_f.append(value / h)
+        value = g(freq + h) - g(freq)
+        Lambda_g.append(value / h)
     except :
-        Lambda_f.append(0)
+        Lambda_g.append(0)
     
 
 # Draw the group delay of the desired signal
 plt.figure(figsize=(7,5))
 plt.title("f")
 
-plt.plot(filtered_freq, Lambda_f, '.')
+# plt.plot(filtered_freq, Lambda_f, '.')
+plt.plot(freq_list, Lambda_g)
 plt.grid()
 
 plt.savefig("04group_delay_signal.png")
 
 
-_Lambda_f = []
-for i in range(int(N/2)) :
-    freq, fft_mag = data[i]
-    _Lambda_f.append(f(freq))
-Lambda_f = np.array(_Lambda_f)
+# _Lambda_f = []
+# for i in range(int(N/2)) :
+#     freq, fft_mag = data[i]
+#     _Lambda_f.append(f(freq))
+# Lambda_f = np.array(_Lambda_f)
 
 
 # make matrix B
