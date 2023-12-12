@@ -35,46 +35,40 @@ phase = [cmath.phase(v) for v in normalize_fft]
 
 T = N / sampling_freq
 k = np.arange(N)
+print(T)
 freq = k / T
 freq_list = [i for i in freq]
 
-data = []
-for i in range(int(N/2)) :
-    data.append((freq[i], fft_magnitude[i]))
-
 # filter the magnitude <= 10**-2
-filtered_freq = []
-filtered_fft_magnitude = []
-for freq, fft_mag in data :
-    if fft_mag <= 10**(-2) :
-        filtered_freq.append(freq)
-        filtered_fft_magnitude.append(fft_mag)
+# data = []
+# for i in range(int(N/2)) :
+#     data.append((freq[i], fft_magnitude[i]))
 
-f = interpolate.interp1d(filtered_freq, filtered_fft_magnitude, kind = 'quadratic')
+# filtered_freq = []
+# filtered_fft_magnitude = []
+# for freq, fft_mag in data :
+#     if fft_mag <= 10**(-2) :
+#         filtered_freq.append(freq)
+#         filtered_fft_magnitude.append(fft_mag)
+
+f = interpolate.interp1d(freq_list[:int(N/2)], fft_magnitude[:int(N/2)], kind = 'quadratic')
+h = 10**(-3)
+Lambda_f = [] #the group delay of the desired signal
+for freq in freq_list :
+    try :
+        value = f(freq + h) - f(freq)
+        Lambda_f.append(value / h)
+    except :
+        Lambda_f.append(0)
 
 data = []
 for i in range(len(freq_list)) :
     data.append((freq_list[i], fft_magnitude[i]))
 
-filtered_freq_list = []
-filtered_phase = []
-for freq, fft_mag in data :
-    if fft_mag <= 10**(-2) :
-        filtered_freq_list.append(freq)
-        filtered_phase.append(fft_mag)
-
 g = interpolate.interp1d(freq_list, phase, kind = 'quadratic')
 
 # calculate forward difference operater
-h = 10**(-4)
-# Lambda_f = [] #the group delay of the desired signal
-# for freq in filtered_freq :
-#     try :
-#         value = f(freq + h) - f(freq)
-#         Lambda_f.append(value / h)
-#     except :
-#         Lambda_f.append(0)
-
+h = 10**(-3)
 Lambda_g = [] #the group delay of the desired signal
 for freq in freq_list :
     try :
@@ -88,7 +82,7 @@ for freq in freq_list :
 plt.figure(figsize=(10,5))
 plt.title("f")
 
-# plt.plot(filtered_freq, Lambda_f, '.')
+plt.plot(freq_list[:int(N/2)], Lambda_f[:int(N/2)])
 plt.plot(freq_list[:int(N/2)], Lambda_g[:int(N/2)])
 plt.grid()
 
@@ -133,8 +127,6 @@ D_psi = B_qT + B_q2m
 conju_Dpsi = np.conjugate(D_psi)
 c_hat1 = np.matmul(np.transpose(conju_Dpsi), conju_Dpsi)
 c_hat2 = np.matmul(np.linalg.inv(c_hat1), np.transpose(conju_Dpsi))
-print(c_hat2.size)
-print(np.array(Lambda_g).size)
 c_hat = np.matmul(c_hat2, np.array(Lambda_g))
 
 Lambda_psi = np.matmul(D_psi, c_hat)

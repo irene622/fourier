@@ -2,11 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 begintime = 0
-endtime = 16
+endtime = 8*np.pi
 timelength = endtime - begintime
-N = 512 * (2**0.25) # number of sample
-sampling_freq = timelength / N
-timepoints = np.arange(begintime, endtime, sampling_freq)
+N = 512 # number of sample
+sampling_interval = timelength / N
+timepoints = np.arange(begintime, endtime, sampling_interval)
 l = 4
 T = 2 ** l # period
 delta_omega = 2*np.pi / T
@@ -104,4 +104,4 @@ if __name__ == "__main__" :
     plt.grid()
     plt.legend()
 
-    plt.savefig("03amplitude_matching_wavelet_N_512_2_1_4.png")
+    plt.savefig("03amplitude_matching_wavelet.png")
