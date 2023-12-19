@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 begintime = 0
-endtime = 8*np.pi
+endtime = 4*np.pi
 timelength = endtime - begintime
 N = 512 # number of sample
 sampling_interval = timelength / N
