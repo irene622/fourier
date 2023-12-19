@@ -46,9 +46,7 @@ def function(t) :
     return t + t**2
 
 N = 64
-print("===================")
 timepoints = torch.arange(0, 2*np.pi+(2*np.pi)/N, (2*np.pi)/N, dtype=float)
-print(timepoints)
 signal = torch.tensor([function(k) for k in timepoints])
 
 fft = torch.fft.fft(signal)
