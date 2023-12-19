@@ -12,11 +12,13 @@ T = 2 ** l # period
 sampling_freq = timelength / T
 P = int(N / T) # number of period
 timepoints = np.arange(begintime*P, endtime*P, sampling_freq)
+# timepoints = np.arange(begintime, endtime*32, sampling_freq)
 delta_omega = 2*np.pi / T
 R = 2 # degree of phase function of lanmda_T
 
 if len(timepoints) != N :
-    raise Exception("Be same the num of samples {} and timepoints {}.".format(N, len(timepoints)))
+    # raise Exception("Be same the num of samples {} and timepoints {}.".format(N, len(timepoints)))
+    print("test")
 
 alpha = 2.0
 f_0 = 0.8
@@ -33,12 +35,10 @@ fft = np.fft.fft(signal)
 fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
 normalize_fft = fft / fft_magnitude
-phase = [cmath.phase(v) for v in normalize_fft]
 # fft_magnitude = fft_magnitude[:int(N/2)] # 0.007853076233206524, 3.8579644884021937
 
 T = N / sampling_freq
 k = np.arange(N)
-print(T)
 freq = k / T
 freq_list = [i for i in freq]
 
@@ -55,6 +55,7 @@ freq_list = [i for i in freq]
 #         filtered_fft_magnitude.append(fft_mag)
 
 f = interpolate.interp1d(freq_list[:int(N/2)], fft_magnitude[:int(N/2)], kind = 'quadratic')
+# f = interpolate.interp1d(freq_list[:len(timepoints)], fft_magnitude, kind = 'quadratic')
 h = 10**(-3)
 Lambda_f = [] #the group delay of the desired signal
 for freq in freq_list :
@@ -64,29 +65,32 @@ for freq in freq_list :
     except :
         Lambda_f.append(0)
 
-data = []
-for i in range(len(freq_list)) :
-    data.append((freq_list[i], fft_magnitude[i]))
+# data = []
+# for i in range(len(freq_list)) :
+#     data.append((freq_list[i], fft_magnitude[i]))
 
+phase = [cmath.phase(v) for v in normalize_fft]
 g = interpolate.interp1d(freq_list, phase, kind = 'quadratic')
 
 # calculate forward difference operater
-h = 10**(-3)
+h = 10**(-5)
 Lambda_g = [] #the group delay of the desired signal
 for freq in freq_list :
     try :
         value = g(freq + h) - g(freq)
-        Lambda_g.append(value / h)
+        Lambda_g.append(abs(value / h))
     except :
         Lambda_g.append(0)
-    
+
 
 # Draw the group delay of the desired signal
 plt.figure(figsize=(10,5))
-plt.title("f")
+plt.title("g")
 
-plt.plot(freq_list[:int(N/2)], Lambda_f[:int(N/2)])
+# plt.plot(freq_list[:int(N/2)], Lambda_f[:int(N/2)])
+# plt.plot(freq_list, Lambda_f[:(len(timepoints))])
 plt.plot(freq_list[:int(N/2)], Lambda_g[:int(N/2)])
+# plt.legend()
 plt.grid()
 
 plt.savefig("04group_delay_signal.png")
