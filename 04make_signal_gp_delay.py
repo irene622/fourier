@@ -3,22 +3,20 @@ import cmath
 import matplotlib.pyplot as plt
 from scipy import interpolate
 
-begintime = -np.pi
-endtime = np.pi
-timelength = endtime - begintime
+
 N = 512 # number of sample
 l = 4
 T = 2 ** l # period
-sampling_freq = timelength / T
+sampling_freq = 1 / T
 P = int(N / T) # number of period
-timepoints = np.arange(begintime*P, endtime*P, sampling_freq)
-# timepoints = np.arange(begintime, endtime*32, sampling_freq)
+begintime = 0
+endtime = int(N * sampling_freq)
+timepoints = np.arange(0, int(N * sampling_freq), sampling_freq)
 delta_omega = 2*np.pi / T
 R = 2 # degree of phase function of lanmda_T
 
 if len(timepoints) != N :
-    # raise Exception("Be same the num of samples {} and timepoints {}.".format(N, len(timepoints)))
-    print("test")
+    raise Exception("Be same the num of samples {} and timepoints {}.".format(N, len(timepoints)))
 
 alpha = 2.0
 f_0 = 0.8
@@ -35,27 +33,13 @@ fft = np.fft.fft(signal)
 fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
 normalize_fft = fft / fft_magnitude
-# fft_magnitude = fft_magnitude[:int(N/2)] # 0.007853076233206524, 3.8579644884021937
 
 T = N / sampling_freq
 k = np.arange(N)
 freq = k / T
 freq_list = [i for i in freq]
 
-# filter the magnitude <= 10**-2
-# data = []
-# for i in range(int(N/2)) :
-#     data.append((freq[i], fft_magnitude[i]))
-
-# filtered_freq = []
-# filtered_fft_magnitude = []
-# for freq, fft_mag in data :
-#     if fft_mag <= 10**(-2) :
-#         filtered_freq.append(freq)
-#         filtered_fft_magnitude.append(fft_mag)
-
 f = interpolate.interp1d(freq_list[:int(N/2)], fft_magnitude[:int(N/2)], kind = 'quadratic')
-# f = interpolate.interp1d(freq_list[:len(timepoints)], fft_magnitude, kind = 'quadratic')
 h = 10**(-3)
 Lambda_f = [] #the group delay of the desired signal
 for freq in freq_list :
@@ -65,12 +49,8 @@ for freq in freq_list :
     except :
         Lambda_f.append(0)
 
-# data = []
-# for i in range(len(freq_list)) :
-#     data.append((freq_list[i], fft_magnitude[i]))
-
 phase = [cmath.phase(v) for v in normalize_fft]
-g = interpolate.interp1d(freq_list, phase, kind = 'quadratic')
+g = interpolate.interp1d(k, phase, kind = 'quadratic')
 
 # calculate forward difference operater
 h = 10**(-5)
@@ -87,10 +67,8 @@ for freq in freq_list :
 plt.figure(figsize=(10,5))
 plt.title("g")
 
-# plt.plot(freq_list[:int(N/2)], Lambda_f[:int(N/2)])
-# plt.plot(freq_list, Lambda_f[:(len(timepoints))])
+plt.plot(freq_list[:int(N/2)], Lambda_f[:int(N/2)])
 plt.plot(freq_list[:int(N/2)], Lambda_g[:int(N/2)])
-# plt.legend()
 plt.grid()
 
 plt.savefig("04group_delay_signal.png")
