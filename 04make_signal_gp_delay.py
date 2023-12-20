@@ -34,7 +34,6 @@ fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
 normalize_fft = fft / fft_magnitude
 
-T = N / sampling_freq
 k = np.arange(N)
 freq = k / T
 freq_list = [i for i in freq]
@@ -69,6 +68,7 @@ plt.title("g")
 
 plt.plot(freq_list[:int(N/2)], Lambda_f[:int(N/2)])
 plt.plot(freq_list[:int(N/2)], Lambda_g[:int(N/2)])
+plt.legend()
 plt.grid()
 
 plt.savefig("04group_delay_signal.png")
