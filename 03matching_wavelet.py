@@ -5,11 +5,12 @@ begintime = 0
 endtime = 4*np.pi
 timelength = endtime - begintime
 N = 512 # number of sample
-sampling_interval = timelength / N
-timepoints = np.arange(begintime, endtime, sampling_interval)
 l = 4
 T = 2 ** l # period
 delta_omega = 2*np.pi / T
+sampling_interval = 1 / T
+timepoints = np.arange(begintime, sampling_interval * N, sampling_interval)
+print(len(timepoints))
 P = int(N / T) # number of period
 R = 2 # degree of phase function of lanmda_T
 
@@ -47,18 +48,6 @@ def matching_wavelet(signal, N, l, T, delta_omega, P) :
     # Make matrix W
     fft = np.fft.fft(signal)
     # fft = np.fft.fftshift(fft)
-
-    # size = fft.shape[0]
-    # _permuatation_mat = np.identity(size)
-    # permuatation_mat = np.zeros((size, size))
-    # n = 0
-    # for idx in range(0, size, 2) :
-    #     permuatation_mat[n, :] = _permuatation_mat[idx, :].copy()
-    #     n += 1
-    # for idx in range(1, size, 2) :
-    #     permuatation_mat[n] = _permuatation_mat[idx]
-    #     n += 1
-    # fft = np.matmul(fft, permuatation_mat)
     
     fft_magnitude = abs(fft) ** 2
 
@@ -67,7 +56,7 @@ def matching_wavelet(signal, N, l, T, delta_omega, P) :
 
     # make matrix W
     W = np.array(fft_magnitude[start_n: end_n+1]) # W.shape = (end_n - start_n + 1, 1)
-    W = W * 1/T # 이게 뭐야...
+    # W = W * 1/T # 이게 뭐야...
 
     if end_n - start_n + 1 == W.shape[0] :
         print("Correspond the size of W")
