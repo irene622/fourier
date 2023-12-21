@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 begintime = 0
-endtime = 16
+endtime = 32
 timelength = endtime - begintime
 N = 512 # number of sample
 sampling_freq = timelength / N # sampling points들의 간격.
@@ -19,7 +19,7 @@ def f_T(x) :
 signal = [f_T(x) for x in timepoints]
 
 # Discrete Fourier transform with Fast Fourier Transform
-fft = np.fft.fft(signal) / N
+fft = np.fft.fft(signal)
 fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
 
@@ -27,11 +27,13 @@ fft_magnitude = abs(fft)
 k = np.arange(N)
 T = N / sampling_freq
 freq = k / T
-
+k = np.arange(0, 8*np.pi, 8*np.pi/N) 
+print(k)
 # Draw the signal graph
 plt.title("the amplitude")
 plt.ylabel("amplitude")
-plt.plot(freq, fft_magnitude)
+plt.plot(k, fft_magnitude)
+plt.plot([14*np.pi/3, 20*np.pi/3], [0,0], "^")
 plt.grid()
 
 plt.savefig("02fft_magnitude.png")

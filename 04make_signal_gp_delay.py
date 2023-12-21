@@ -49,25 +49,27 @@ for freq in freq_list :
         Lambda_f.append(0)
 
 phase = [cmath.phase(v) for v in normalize_fft]
-g = interpolate.interp1d(k, phase, kind = 'quadratic')
+# phase = [p if p>=0 else p+(2*np.pi) for p in phase]
+g = interpolate.interp1d(freq_list, phase, kind = 'quadratic')
 
 # calculate forward difference operater
-h = 10**(-5)
+h = 10**(-2)
 Lambda_g = [] #the group delay of the desired signal
 for freq in freq_list :
     try :
         value = g(freq + h) - g(freq)
         Lambda_g.append(abs(value / h))
     except :
-        Lambda_g.append(0)
+        Lambda_g.append(g(freq))
 
 
 # Draw the group delay of the desired signal
 plt.figure(figsize=(10,5))
 plt.title("g")
 
-plt.plot(freq_list[:int(N/2)], Lambda_f[:int(N/2)])
-plt.plot(freq_list[:int(N/2)], Lambda_g[:int(N/2)])
+# plt.plot(freq_list[:int(N/2)], Lambda_f[:int(N/2)], label="f magnitude")
+negative_freq_list = [i-N for i in freq_list[int(N/2):]]
+plt.plot(freq_list[:int(N/2)], Lambda_g[:int(N/2)], label="g phase")
 plt.legend()
 plt.grid()
 
