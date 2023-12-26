@@ -2,6 +2,7 @@ import numpy as np
 import cmath
 import matplotlib.pyplot as plt
 from scipy import interpolate
+from matching_wavelet import *
 
 begintime = 0
 endtime = 16
@@ -29,11 +30,11 @@ signal = [f_T(x) for x in timepoints]
 
 # make the group delay of signal
 fft = np.fft.fft(signal)
-fft = np.fft.fftshift(fft)
+# fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
 normalize_fft = fft / fft_magnitude
 
-k = np.arange(N)
+k = np.arange(len(normalize_fft))
 freq = k / T
 freq_list = [i for i in freq]
 
@@ -61,14 +62,6 @@ plt.grid()
 
 plt.savefig("04group_delay_signal.png")
 
-
-# _Lambda_f = []
-# for i in range(int(N/2)) :
-#     freq, fft_mag = data[i]
-#     _Lambda_f.append(f(freq))
-# Lambda_f = np.array(_Lambda_f)
-
-
 # make matrix B
 def Pi(n, k, T) :
     if -0.5 <= (n - T*k) / T < 0.5 :
@@ -84,17 +77,25 @@ def b_nr(n, r) :
     return b_nr
 
 B_qT = np.zeros((N, int(R/2 + 1)))
-for n in range(N) :
-    for r in range(int(R/2 + 1)) :
+for n in range(N) : # row index
+    for r in range(int(R/2 + 1)) : # column index
         B_qT[n][r] = b_nr(int(n/2 + T/2), r)
 
 
 B_q2m = np.zeros((N, int(R/2 + 1)))
-for n in range(N) :
-    for r in range(int(R/2 + 1)) :
+for n in range(N) : # row index
+    for r in range(int(R/2 + 1)) : # column index
         B_q2m[n][r] = b_nr(n/2, r)
 
 D_psi = B_qT + B_q2m
+
+
+start_n = int(2**l / 3) + 1
+end_n = int((2**(l+2)) / 3)
+
+Y, W = matching_wavelet(signal, N, l, T, delta_omega, P)
+Omega = Y / sum(Y)
+bar_Lambda_f = np.multiply(Lambda_f[start_n: end_n+1], Omega)
 
 # calculate Lambda_psi
 conju_Dpsi = np.conjugate(D_psi)
