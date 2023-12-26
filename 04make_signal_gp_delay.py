@@ -3,16 +3,15 @@ import cmath
 import matplotlib.pyplot as plt
 from scipy import interpolate
 
-
+begintime = 0
+endtime = 16
 N = 512 # number of sample
 l = 4
 T = 2 ** l # period
-sampling_freq = 1 / T
-P = int(N / T) # number of period
-begintime = 0
-endtime = int(N * sampling_freq)
-timepoints = np.arange(0, int(N * sampling_freq), sampling_freq)
 delta_omega = 2*np.pi / T
+sampling_freq = 1 / T
+timepoints = np.arange(begintime, endtime, (endtime - begintime) / N)
+P = int(N / T) # number of period
 R = 2 # degree of phase function of lanmda_T
 
 if len(timepoints) != N :

@@ -3,17 +3,17 @@ import matplotlib.pyplot as plt
 
 begintime = 0
 endtime = 16
-timelength = endtime - begintime
 N = 512 # number of sample
 l = 4
 T = 2 ** l # period
 delta_omega = 2*np.pi / T
 sampling_freq = 1 / T
 timepoints = np.arange(begintime, endtime, (endtime - begintime) / N)
-print(len(timepoints))
 P = int(N / T) # number of period
 R = 2 # degree of phase function of lanmda_T
 
+if len(timepoints) != N :
+    raise Exception("Be same the num of samples {} and timepoints {}.".format(N, len(timepoints)))
 
 alpha = 2.0
 f_0 = 0.8
