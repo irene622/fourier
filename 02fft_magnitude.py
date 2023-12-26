@@ -16,7 +16,7 @@ def f_T(x) :
     else :
         u = 1 
     return x * np.exp(-alpha * x) * np.cos(2*np.pi*f_0*x) * u
-signal = [f_T(x) for x in timepoints]
+signal = [f_T(1*x) for x in timepoints]
 
 # Discrete Fourier transform with Fast Fourier Transform
 fft = np.fft.fft(signal)
@@ -24,16 +24,17 @@ fft = np.fft.fftshift(fft)
 fft_magnitude = abs(fft)
 
 # freq domain
-k = np.arange(N)
-T = N / sampling_freq
+T = 16
+k = np.arange(-(T/2), T/2, T/N)
+print(len(k))
 freq = k / T
 k = np.arange(0, 8*np.pi, 8*np.pi/N) 
-print(k)
+
 # Draw the signal graph
 plt.title("the amplitude")
 plt.ylabel("amplitude")
-plt.plot(k, fft_magnitude)
-plt.plot([14*np.pi/3, 20*np.pi/3], [0,0], "^")
+plt.plot(freq, fft_magnitude)
+# plt.plot([2*np.pi/3, 8*np.pi/3], [0,0], "^")
 plt.grid()
 
 plt.savefig("02fft_magnitude.png")
