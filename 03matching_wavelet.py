@@ -2,14 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 begintime = 0
-endtime = 4*np.pi
+endtime = 16
 timelength = endtime - begintime
 N = 512 # number of sample
 l = 4
 T = 2 ** l # period
 delta_omega = 2*np.pi / T
-sampling_interval = 1 / T
-timepoints = np.arange(begintime, sampling_interval * N, sampling_interval)
+sampling_freq = 1 / T
+timepoints = np.arange(begintime, endtime, (endtime - begintime) / N)
 print(len(timepoints))
 P = int(N / T) # number of period
 R = 2 # degree of phase function of lanmda_T
@@ -56,7 +56,7 @@ def matching_wavelet(signal, N, l, T, delta_omega, P) :
 
     # make matrix W
     W = np.array(fft_magnitude[start_n: end_n+1]) # W.shape = (end_n - start_n + 1, 1)
-    # W = W * 1/T # 이게 뭐야...
+    W = W * 1/T # 이게 뭐야...
 
     if end_n - start_n + 1 == W.shape[0] :
         print("Correspond the size of W")

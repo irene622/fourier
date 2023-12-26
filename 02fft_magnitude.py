@@ -26,7 +26,6 @@ fft_magnitude = abs(fft)
 # freq domain
 T = 16
 k = np.arange(-(T/2), T/2, T/N)
-print(len(k))
 freq = k / T
 k = np.arange(0, 8*np.pi, 8*np.pi/N) 
 
