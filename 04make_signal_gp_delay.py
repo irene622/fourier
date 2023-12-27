@@ -61,6 +61,7 @@ plt.legend()
 plt.grid()
 
 plt.savefig("04group_delay_signal.png")
+Lambda_f = np.array(Lambda_f)
 
 # make matrix B
 def Pi(n, k, T) :
@@ -89,19 +90,23 @@ for n in range(N) : # row index
 
 D_psi = B_qT + B_q2m
 
-
 start_n = int(2**l / 3) + 1
 end_n = int((2**(l+2)) / 3)
 
-Y, W = matching_wavelet(signal, N, l, T, delta_omega, P)
-Omega = Y / sum(Y)
-bar_Lambda_f = np.multiply(Lambda_f[start_n: end_n+1], Omega)
+Y, _ = matching_wavelet(signal, N, l, T, delta_omega, P)
+_Y = np.zeros(Lambda_f.shape)
+_Y[start_n:end_n+1] = Y
+Omega = _Y / sum(_Y)
+bar_Lambda_f = np.multiply(Lambda_f, Omega) # elementary wise product
 
 # calculate Lambda_psi
-conju_Dpsi = np.conjugate(D_psi)
-c_hat1 = np.matmul(np.transpose(conju_Dpsi), conju_Dpsi)
-c_hat2 = np.matmul(np.linalg.inv(c_hat1), np.transpose(conju_Dpsi))
-c_hat = np.matmul(c_hat2, np.array(Lambda_f))
+_Omega = np.zeros(D_psi.shape)
+for col in range(_Omega.shape[1]) :
+    _Omega[:,col] = Omega
+bar_Dpsi = np.multiply(D_psi, _Omega)
+c_hat1 = np.matmul(np.transpose(bar_Dpsi), bar_Dpsi)
+c_hat2 = np.matmul(np.linalg.inv(c_hat1), np.transpose(bar_Dpsi))
+c_hat = np.matmul(c_hat2, np.array(bar_Lambda_f))
 
 Lambda_psi = np.matmul(D_psi, c_hat)
 
